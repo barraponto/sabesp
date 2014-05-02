@@ -1,0 +1,3 @@
+Pillow==2.4.0
+Unidecode==0.04.14
+pyocr==0.2.3
