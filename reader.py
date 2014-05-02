@@ -1,6 +1,7 @@
 import re
 from PIL import Image, ImageFilter
 from pyocr import tesseract
+from unidecode import unidecode
 
 
 class SabespReader(object):
@@ -10,14 +11,15 @@ class SabespReader(object):
         return image.resize(
             [n*10 for n in image.size], Image.ANTIALIAS
         ).filter(
-            ImageFilter.UnsharpMask(radius=16)
+            ImageFilter.UnsharpMask(radius=14)
         ).convert(
             'P', palette=Image.ADAPTIVE, colors=2
         )
 
     @staticmethod
     def text_optimizer(text):
-        text = text.replace(',', '.').replace('-', '.')
+        text = unidecode(text).replace(' ', '')
+        text = text.replace(',', '.').replace('-', '.').replace('?', '7')
         search = re.compile(r'\d+\.\d+').findall(text)
         return search.pop() if search else 'DEBUG ' + text
 
