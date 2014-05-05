@@ -18,7 +18,7 @@ setDate = (date) ->
 saveDate = (date) ->
   return -> casper.download(
     casper.evaluate -> return document.getElementById('imgSistema').src
-    'source/' + date.year + date.month + date.day + '.js'
+    'source/' + date.year + date.month + date.day + '.jpg'
   )
 
 casper.start starturl, ->
