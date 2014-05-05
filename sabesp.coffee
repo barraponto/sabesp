@@ -13,7 +13,8 @@ setDate = (date) ->
       'cmbDia': date.day,
       'cmbMes': date.month,
       'cmbAno': date.year,
-    }, true)
+    })
+    casper.click('#botSalvarHD')
 
 saveDate = (date) ->
   return -> casper.download(
@@ -23,6 +24,9 @@ saveDate = (date) ->
 
 casper.start starturl, ->
   @each dates, (self, date) ->
-    self.then(setDate(date)).then(saveDate(date))
+    self.then(setDate(date)).wait(
+      3141,
+      saveDate(date),
+    )
 
 casper.run()
