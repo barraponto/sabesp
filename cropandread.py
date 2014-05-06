@@ -37,13 +37,13 @@ class CropperReader(object):
         :param threshold: callback, takes String and should return False for a rerun.
         '''
         if image_optimizer:
-            region = image_optimizer(region, rerun)
-        data = tesseract.image_to_string(region)
+            optiregion = image_optimizer(region, rerun)
+        data = tesseract.image_to_string(optiregion)
         if data_optimizer:
             data = data_optimizer(data, rerun)
         if threshold and not threshold(data):
             return self.get_data(
-                self, region, rerun + 1,
+                region, rerun + 1,
                 image_optimizer, data_optimizer, threshold)
         else:
             return data
