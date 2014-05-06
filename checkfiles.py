@@ -30,5 +30,7 @@ for filename, result in md5sums.iteritems():
 rerun = list(chain.from_iterable(
     [keys for value, keys in grouped_results.iteritems() if len(keys) > 1]))
 
+rerun = [{'year': dt[0], 'month': dt[1], 'day': dt[2]} for dt in [d.split() for d in rerun]]
+
 with open('rerun.json', 'w') as f:
     json.dump(rerun, f)
