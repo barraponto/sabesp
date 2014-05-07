@@ -1,5 +1,5 @@
 import re
-from csv import DictWriter
+from csv import DictWriter, DictReader
 from glob import iglob
 from PIL import Image, ImageFilter
 from unidecode import unidecode
@@ -55,13 +55,24 @@ def sabesp_threshold(data):
     return data if isinstance(data, bool) else True
 
 
-data_generator = (
-    dict(SabespCR(filepath).read_image(
-        sabesp_imgopt, sabesp_datopt, sabesp_threshold).values,
-        date=filepath[7:-4])
+data_generator = ({
+    filepath[7:-4]: SabespCR(filepath).read_image(
+        sabesp_imgopt, sabesp_datopt, sabesp_threshold).values}
     for filepath in iglob('source/*.jpg'))
 
-with open('data.csv', 'w') as f:
-    writer = DictWriter(f, SabespCR.regions.keys() + ['date'])
-    writer.writeheader()
-    writer.writerows(data_generator)
+with open('data.csv', 'a+') as f:
+    keys = ['date'] + SabespCR.regions.keys()
+    reader = DictReader(f, keys)
+    writer = DictWriter(f, keys)
+
+    if sum(1 for i in reader) == 0:
+        writer.writeheader()
+
+    for filepath in iglob('source/*.jpg'):
+        if filepath[7:-4] not in [line['date'] for line in reader]:
+            print 'Processing {f}.'.format(f=filepath)
+            writer.writerow(dict(
+                SabespCR(filepath).read_image(
+                    sabesp_imgopt, sabesp_datopt, sabesp_threshold).values,
+                date=filepath[7:-4]))
+            print 'Finished processing {f}.'.format(f=filepath)
