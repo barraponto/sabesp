@@ -68,10 +68,12 @@ with open('data.csv', 'a+') as f:
     for filepath in iglob('source/*.jpg'):
         if filepath[7:-4] not in [line['date'] for line in data]:
             print 'Processing {f}.'.format(f=filepath)
-            writer.writerow(dict(
-                SabespCR(filepath).read_image(
+            try:
+                writer.writerow(dict(SabespCR(filepath).read_image(
                     sabesp_imgopt, sabesp_datopt, sabesp_threshold).values,
-                date=filepath[7:-4]))
-            print 'Finished processing {f}.'.format(f=filepath)
+                    date=filepath[7:-4]))
+                print 'Finished processing {f}.'.format(f=filepath)
+            except IOError:
+                print 'Skipped {f} due to file errors.'.format(f=filepath)
         else:
             print 'Skipped {f}.'.format(f=filepath)
