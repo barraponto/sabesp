@@ -76,3 +76,5 @@ with open('data.csv', 'a+') as f:
                     sabesp_imgopt, sabesp_datopt, sabesp_threshold).values,
                 date=filepath[7:-4]))
             print 'Finished processing {f}.'.format(f=filepath)
+        else:
+            print 'Skipped {f}.'.format(f=filepath)
