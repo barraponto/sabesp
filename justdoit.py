@@ -39,6 +39,8 @@ def sabesp_imgopt(image, rerun=0):
 
 
 def sabesp_datopt(data, rerun=0):
+    if rerun > 3:
+        return 'ERROR'
     data = unidecode(data).replace(' ', '')
     data = data.replace(',', '.').replace('-', '.').replace('?', '7')
     search = re.compile(r'\d+\.\d+').findall(data)
